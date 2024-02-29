@@ -6,11 +6,12 @@ export interface ProjetLink {
     path: string,
     element: any,
     isVisible: boolean,
-    label:string
+    label: string
 }
+export const baseRoot = "https://localhost:7013/api"
 export const projectComponents = [
     {
-        label:"Home",
+        label: "Home",
         path: "/",
         element: <MainLayout>
             <HomePage />
@@ -19,7 +20,7 @@ export const projectComponents = [
 
     },
     {
-        label:"All data",
+        label: "All data",
         path: "/GetData",
         element: <MainLayout>
             <AllDataPage />
