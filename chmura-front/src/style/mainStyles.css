@@ -1,0 +1,12 @@
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
