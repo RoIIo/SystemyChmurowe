@@ -42,23 +42,23 @@ namespace Chmura.Controllers
 		}
 
 		[HttpGet("GetMetadata", Name = "GetMetadata")]
-		public async Task<ActionResult<Metadata>> GetMetadata()
+		public async Task<ActionResult<Metadata>> GetMetadata([FromQuery] HoneyFilter filter)
 		{
 			Metadata result = new Metadata();
 			await transactionCoordinator.InRollbackScopeAsync(async session =>
 			{
-				result.TotalEntities = await honeyRepository.GetTotalEntities(session);
+				result.TotalEntities = await honeyRepository.GetTotalEntities(filter, session);
 			});
 			return Ok(result);
 		}
 
 		[HttpGet("GetAll", Name = "GetAll")]
-        public async Task<ActionResult<IList<HoneyDto>>> GetAll([FromQuery] int page = 0, [FromQuery] int pageSize = 100)
+        public async Task<ActionResult<IList<HoneyDto>>> GetAll([FromQuery] int page = 0, [FromQuery] int pageSize = 100, [FromQuery] HoneyFilter? filter = null)
 		{
 			IList<HoneyDto> result = new List<HoneyDto> ();
 			await transactionCoordinator.InRollbackScopeAsync(async session =>
 			{
-				var honeyList = await honeyRepository.GetPage(page, pageSize, session);
+				var honeyList = await honeyRepository.GetPage(page, pageSize, filter, session);
 				result = honeyList.Select(honey => honey.ToDto()).ToList();
 			});
 			return Ok(result);
