@@ -11,8 +11,13 @@ header {
   gap: 10px;
 }
 
+body {
+  position: relative;
+}
+
 .data-table tr {
   margin-top: 5px;
+  cursor: pointer;
 }
 .data-table td {
   padding: 5px 10px;

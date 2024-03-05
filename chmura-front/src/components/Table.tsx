@@ -1,3 +1,8 @@
+import { useState } from "react"
+import { Modal } from "./Popup"
+import { HoneyForm } from "./HoneyForm"
+import Popup from "reactjs-popup"
+
 export interface ITableProps {
     data: Honey[]
     [x: string]: any
@@ -17,20 +22,33 @@ export interface Honey {
 }
 export const Table = (props: ITableProps) => {
     const
-        { data } = props;
+        { data } = props,
+        [isPopup, setPopup] = useState(false)
+     
 
 
     if (data.length == 0) return <></>
-    return <table cellSpacing={0} className="data-table">
-        <thead>
-            {Object.keys(data[0]).map((d, idx) => <th key={"-1" + idx}>{d}</th>)}
-        </thead>
-        <tbody>
-            {data.map((d, idx) => {
-                return <tr className={`row ${idx % 2 && "alt-row"}`}>
-                    {Object.keys(d).map((key, idx) => <td key={"" + d["id"] + idx}>{d[key]}</td>)}
-                </tr>
-            })}
-        </tbody>
-    </table>
+    return <>
+        <table cellSpacing={0} className="data-table">
+            <thead>
+                {Object.keys(data[0]).map((d, idx) => <th key={"-1" + idx}>{d}</th>)}
+                <th></th>
+            </thead>
+            <tbody>
+                {data.map((d, idx) => {
+                    return <tr className={`row ${idx % 2 && "alt-row"}`}>
+                        {Object.keys(d).map((key, idx) => <td key={"" + d["id"] + idx}>
+                            {d[key]}
+                        </td>)}
+                        <td>
+                            <Popup position={"center center"} trigger={<button >Edit</button>}>
+                                <HoneyForm item={d} isEdit={true} />
+                                XDDDDDDDD
+                            </Popup>
+                        </td>
+                    </tr>
+                })}
+            </tbody>
+        </table>
+    </>
 }

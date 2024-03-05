@@ -5,7 +5,7 @@ import { baseRoot } from '../components/projectComponents'
 import { Honey, Table } from '../components/Table'
 import { AjaxWrapper } from '../components/AjaxWrapper'
 
-export const AllDataPage = (props) => {
+export const HoneyPage = (props) => {
     const
         [data, setData] = useState<Honey[]>([]),
         [isPending, setPending] = useState(false),
@@ -19,7 +19,7 @@ export const AllDataPage = (props) => {
         getData()
     }, [])
     return <PageWrapper>
-        <h1>All data</h1>
+        <h1>Honey data entries</h1>
         <AjaxWrapper isAjax={isPending}>
             <Table data={data} />
         </AjaxWrapper>

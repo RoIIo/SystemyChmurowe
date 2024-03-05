@@ -1,4 +1,4 @@
-import { AllDataPage } from "../pages/AllDataPage"
+import { HoneyPage } from "../pages/HoneyPage"
 import { HomePage } from "../pages/HomePage"
 import { MainLayout } from "./Layout"
 
@@ -20,10 +20,10 @@ export const projectComponents = [
 
     },
     {
-        label: "All data",
+        label: "Honey",
         path: "/GetData",
         element: <MainLayout>
-            <AllDataPage />
+            <HoneyPage />
         </MainLayout>,
         isVisible: true,
 
