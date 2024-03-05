@@ -36,13 +36,7 @@ namespace Chmura
             builder.Services.AddSingleton<IPollenRepository, PollenRepository>();
             builder.Services.AddSingleton<ICSVReader, CSVReader>();
 
-
-
             var app = builder.Build();
-
-            var reader = app.Services.GetRequiredService<ICSVReader>();
-            string? dataPath = builder.Configuration.GetSection("DataPath").Value?.ToString();
-            reader.LoadData(dataPath);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

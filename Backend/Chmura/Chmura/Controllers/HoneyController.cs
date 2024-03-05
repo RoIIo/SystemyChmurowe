@@ -1,5 +1,6 @@
 ﻿using Chmura.Database.Entities;
 using Chmura.Database.Mapping;
+using Chmura.Domain;
 using Chmura.Dto;
 using Chmura.ORM;
 using Chmura.Repository;
@@ -22,23 +23,43 @@ namespace Chmura.Controllers
 		private readonly ITransactionCoordinator transactionCoordinator;
 		private readonly IHoneyRepository honeyRepository;
 		private readonly IPollenRepository pollenRepository;
+		private readonly ICSVReader reader;
 
-		public HoneyController(ILogger<HoneyController> logger, ITransactionCoordinator transactionCoordinator, IHoneyRepository honeyRepository, IPollenRepository pollenRepository)
+		public HoneyController(ILogger<HoneyController> logger, ITransactionCoordinator transactionCoordinator, IHoneyRepository honeyRepository, IPollenRepository pollenRepository, ICSVReader reader)
 		{
 			this.transactionCoordinator = transactionCoordinator;
 			this.honeyRepository = honeyRepository;
 			_logger = logger;
 			this.pollenRepository = pollenRepository;
+			this.reader = reader;
+		}
+
+		[HttpPost("ReloadData", Name = "ReloadData")]
+		public async Task<ActionResult<string>> ReloadData()
+		{
+			await reader.LoadDataAsync();
+			return Ok("Data reloaded");
+		}
+
+		[HttpGet("GetMetadata", Name = "GetMetadata")]
+		public async Task<ActionResult<Metadata>> GetMetadata()
+		{
+			Metadata result = new Metadata();
+			await transactionCoordinator.InRollbackScopeAsync(async session =>
+			{
+				result.TotalEntities = await honeyRepository.GetTotalEntities(session);
+			});
+			return Ok(result);
 		}
 
 		[HttpGet("GetAll", Name = "GetAll")]
-        public async Task<ActionResult<IList<HoneyDto>>> GetAll()
+        public async Task<ActionResult<IList<HoneyDto>>> GetAll([FromQuery] int page = 0, [FromQuery] int pageSize = 100)
 		{
 			IList<HoneyDto> result = new List<HoneyDto> ();
 			await transactionCoordinator.InRollbackScopeAsync(async session =>
 			{
-				var honeyList = await honeyRepository.GetAll(session);
-				result = honeyList.Select(honey => honey.ToDto()).Take(500).ToList();
+				var honeyList = await honeyRepository.GetPage(page, pageSize, session);
+				result = honeyList.Select(honey => honey.ToDto()).ToList();
 			});
 			return Ok(result);
 		}
