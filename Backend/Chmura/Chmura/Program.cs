@@ -2,6 +2,7 @@
 using Chmura.Domain;
 using Chmura.ORM;
 using Chmura.Repository;
+using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 
 namespace Chmura
@@ -12,7 +13,18 @@ namespace Chmura
         {
             var builder = WebApplication.CreateBuilder(args);
             var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+            var specificOrgins = "AppOrigins";
+
             // Add services to the container.
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: specificOrgins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:5173");
+                                  });
+            });
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -23,17 +35,8 @@ namespace Chmura
             builder.Services.AddSingleton<IHoneyRepository, HoneyRepository>();
             builder.Services.AddSingleton<IPollenRepository, PollenRepository>();
             builder.Services.AddSingleton<ICSVReader, CSVReader>();
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    policy =>
-                    {
-                        policy.WithOrigins("http://localhost:5173/",
-                                            "https://localhost:7013");
-                    });
-            }
 
-            );
+
 
             var app = builder.Build();
 
@@ -49,7 +52,8 @@ namespace Chmura
             }
 
             app.UseHttpsRedirection();
-            app.UseCors();
+            app.UseCors(specificOrgins);
+
             app.UseAuthorization();
 
 

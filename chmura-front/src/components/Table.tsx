@@ -19,11 +19,11 @@ export const Table = (props: ITableProps) => {
     const
         { data } = props;
 
-        
+
     if (data.length == 0) return <></>
     return <table cellSpacing={0} className="data-table">
         <thead>
-            {Object.keys(data[0]).map((d, idx) => <th>{d}</th>)}
+            {Object.keys(data[0]).map((d, idx) => <th key={"-1" + idx}>{d}</th>)}
         </thead>
         <tbody>
             {data.map((d, idx) => {

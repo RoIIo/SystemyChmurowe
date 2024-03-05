@@ -32,14 +32,13 @@ namespace Chmura.Controllers
 		}
 
 		[HttpGet("GetAll", Name = "GetAll")]
-        [EnableCors]
         public async Task<ActionResult<IList<HoneyDto>>> GetAll()
 		{
 			IList<HoneyDto> result = new List<HoneyDto> ();
 			await transactionCoordinator.InRollbackScopeAsync(async session =>
 			{
 				var honeyList = await honeyRepository.GetAll(session);
-				result = honeyList.Select(honey => honey.ToDto()).ToList();
+				result = honeyList.Select(honey => honey.ToDto()).Take(500).ToList();
 			});
 			return Ok(result);
 		}

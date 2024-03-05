@@ -3,20 +3,25 @@ import { PageWrapper } from '../components/PageWrapper'
 import axios from 'axios'
 import { baseRoot } from '../components/projectComponents'
 import { Honey, Table } from '../components/Table'
+import { AjaxWrapper } from '../components/AjaxWrapper'
 
 export const AllDataPage = (props) => {
     const
         [data, setData] = useState<Honey[]>([]),
+        [isPending, setPending] = useState(false),
         getData = async () => {
+            setPending(true)
             let req = await axios.get(baseRoot + "/Honey/GetAll")
-            console.log(req)
-            setData(req.data || []) 
+            setData(req.data || [])
+            setPending(false)
         }
     useEffect(() => {
         getData()
     }, [])
     return <PageWrapper>
         <h1>All data</h1>
-        <Table data={data} />
+        <AjaxWrapper isAjax={isPending}>
+            <Table data={data} />
+        </AjaxWrapper>
     </PageWrapper>
 }
