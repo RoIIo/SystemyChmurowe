@@ -10,3 +10,22 @@ header {
   grid-template-columns: 1fr;
   gap: 10px;
 }
+
+.data-table tr {
+  margin-top: 5px;
+}
+.data-table td {
+  padding: 5px 10px;
+}
+.data-table .row {
+  background-color: #444444;
+}
+.data-table .row:hover {
+  background-color: rgba(68, 68, 68, 0.6666666667);
+}
+.data-table .alt-row {
+  background-color: #666666;
+}
+.data-table .alt-row:hover {
+  background-color: rgba(102, 102, 102, 0.6666666667);
+}

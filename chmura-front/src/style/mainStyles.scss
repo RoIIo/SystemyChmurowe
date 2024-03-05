@@ -8,5 +8,25 @@ header{
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
+}
+.data-table{
     
+    tr{
+        margin-top: 5px;
+    }
+    td{
+        padding: 5px 10px;
+    }
+    .row{
+        background-color: #444444ff;
+        &:hover{
+                    background-color: #444444aa;
+        }
+    }
+    .alt-row{
+        background-color: #666666ff;
+        &:hover{
+                    background-color: #666666aa;
+        }
+    }
 }
