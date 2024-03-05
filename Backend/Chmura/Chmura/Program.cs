@@ -2,6 +2,7 @@
 using Chmura.Domain;
 using Chmura.ORM;
 using Chmura.Repository;
+using System.Configuration;
 
 namespace Chmura
 {
@@ -26,7 +27,7 @@ namespace Chmura
 			var app = builder.Build();
 
 			var reader = app.Services.GetRequiredService<ICSVReader>();
-			string? dataPath = builder.Configuration.GetSection("DataPath").Value.ToString();
+			string? dataPath = builder.Configuration.GetSection("DataPath").Value?.ToString();
 			reader.LoadData(dataPath);
 
 			// Configure the HTTP request pipeline.

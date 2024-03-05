@@ -17,12 +17,14 @@ namespace Chmura.ORM
     public class NHibernateHelper : INHibernateHelper
     {
         private ISessionFactory sessionFactory;
-        public NHibernateHelper()
+        private string connectionString;
+        public NHibernateHelper(IConfiguration configuration)
         {
-            sessionFactory = FluentConfigure();
-        }
+			connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
+			sessionFactory = FluentConfigure();
+		}
 
-        public ISession OpenSession()
+		public ISession OpenSession()
         {
             return sessionFactory.OpenSession();
         }
@@ -52,14 +54,7 @@ namespace Chmura.ORM
 		}
 		private IPersistenceConfigurer GetDatabaseConfiguration()
         {
-            return PostgreSQLConfiguration.PostgreSQL83.ConnectionString(c =>
-            {
-                c.Host("127.0.0.1");
-                c.Database("CHMURA");
-                c.Port(5432);
-                c.Username("CHMURAUser");
-                c.Password("CHMURAPassword");
-            }).AdoNetBatchSize(5000);
+            return PostgreSQLConfiguration.PostgreSQL83.ConnectionString(connectionString).AdoNetBatchSize(5000);
         }
     }
 }
