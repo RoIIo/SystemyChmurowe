@@ -11,6 +11,7 @@ namespace Chmura.Repository
 		Task<Honey> GetById(int id, ISession session);
 		Task<IList<Honey>> GetPage(int page, int pageSize, HoneyFilter filter, ISession session);
 		Task<int> GetTotalEntities(HoneyFilter filter, ISession session);
+		Task<IList<Honey>> GetFilteredEntities(HoneyFilter filter, ISession session);
 		Task Delete(Honey honey, ISession session);
 		Task DeleteById(int id, ISession session);
 		Task Insert(Honey honey, ISession session);
@@ -18,6 +19,10 @@ namespace Chmura.Repository
 	}
 	public class HoneyRepository : IHoneyRepository
 	{
+		public async Task<IList<Honey>> GetFilteredEntities(HoneyFilter filter, ISession session)
+		{
+			return await session.Query<Honey>().AddWhere(filter).ToListAsync();
+		}
 		public async Task<int> GetTotalEntities(HoneyFilter filter, ISession session)
 		{
 			return await session.Query<Honey>().AddWhere(filter).CountAsync();
