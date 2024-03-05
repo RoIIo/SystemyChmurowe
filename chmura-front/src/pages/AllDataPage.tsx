@@ -7,7 +7,7 @@ export const AllDataPage = (props) => {
     const
         [data, setData] = useState(),
         getData = async () => {
-            let req = await axios.get(baseRoot + "/honey/GetAll")
+            let req = await axios.get(baseRoot + "/Honey/GetAll")
             console.log(req)
             setData(req.data)
         }

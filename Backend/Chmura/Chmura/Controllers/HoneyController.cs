@@ -4,6 +4,7 @@ using Chmura.Dto;
 using Chmura.ORM;
 using Chmura.Repository;
 using FluentNHibernate.Data;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using NHibernate.Linq;
 using System.Collections.Generic;
@@ -31,7 +32,8 @@ namespace Chmura.Controllers
 		}
 
 		[HttpGet("GetAll", Name = "GetAll")]
-		public async Task<ActionResult<IList<HoneyDto>>> GetAll()
+        [EnableCors]
+        public async Task<ActionResult<IList<HoneyDto>>> GetAll()
 		{
 			IList<HoneyDto> result = new List<HoneyDto> ();
 			await transactionCoordinator.InRollbackScopeAsync(async session =>
