@@ -9,7 +9,7 @@ export const AllDataPage = (props) => {
         getData = async () => {
             let req = await axios.get(baseRoot + "/Honey/GetAll")
             console.log(req)
-            setData(req.data)
+            setData(req.data) 
         }
     useEffect(() => {
         getData()
