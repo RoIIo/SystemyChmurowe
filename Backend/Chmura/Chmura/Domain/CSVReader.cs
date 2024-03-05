@@ -26,6 +26,10 @@ namespace Chmura.Domain
 		public void LoadData(string? dataPath)
 		{
 			if (dataPath == null) return;
+			if(!Path.IsPathRooted(dataPath))
+			{
+				dataPath = Path.Combine(Directory.GetCurrentDirectory(), dataPath);
+			}
 			transactionCoordinator.InCommitScope(session =>
 			{
 				var pollenCache =new Dictionary<string, Pollen>();
