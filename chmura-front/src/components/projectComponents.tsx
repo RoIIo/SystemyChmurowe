@@ -1,6 +1,7 @@
 import { HoneyPage } from "../pages/HoneyPage"
 import { HomePage } from "../pages/HomePage"
 import { MainLayout } from "./Layout"
+import { StatisticsPage } from "../pages/StatisticsPage"
 
 export interface ProjetLink {
     path: string,
@@ -24,6 +25,15 @@ export const projectComponents = [
         path: "/GetData",
         element: <MainLayout>
             <HoneyPage />
+        </MainLayout>,
+        isVisible: true,
+
+    },
+    {
+        label: "Statistics",
+        path: "/Stats",
+        element: <MainLayout>
+            <StatisticsPage />
         </MainLayout>,
         isVisible: true,
 
