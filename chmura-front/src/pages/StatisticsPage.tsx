@@ -57,8 +57,8 @@ export const StatisticsPage = () => {
                     <label htmlFor="filterValue">Value</label>
                     <input type="text" name='filterValue' id="filterValue" onChange={(e) => setFilterValue(e.target.value)} />
                 </div>
-                <button onClick={getDataFilters}>Filter</button>
             </div>
+            <button onClick={getDataFilters}>Filter</button>
             {
                 statistics && <div className="stats-table">
                     {
