@@ -65,7 +65,7 @@ namespace Chmura.Controllers
 		}
 
 		[HttpGet("GetAll", Name = "GetAll")]
-		public async Task<ActionResult<IList<HoneyDto>>> GetAll([FromQuery] int page = 0, [FromQuery] int pageSize = 100, [FromQuery] HoneyFilter? filter = null)
+		public async Task<ActionResult<IList<HoneyDto>>> GetAll([FromQuery] int page = 0, [FromQuery] int pageSize = 100, [FromQuery] HoneyFilter filter = null)
 		{
 			IList<HoneyDto> result = new List<HoneyDto>();
 			await transactionCoordinator.InRollbackScopeAsync(async session =>
@@ -166,7 +166,16 @@ namespace Chmura.Controllers
 			existingHoney.G = honeyDto.G;
 			existingHoney.Viscosity = honeyDto.Viscosity;
 			existingHoney.Purity = honeyDto.Purity;
-			existingHoney.PollenAnalysis = await transactionCoordinator.InRollbackScopeAsync(async session => await pollenRepository.GetPollenByName(honeyDto.Pollen_analysis ?? "", session));
+			existingHoney.PollenAnalysis = await transactionCoordinator.InCommitScopeAsync(async session =>
+			{
+				var pollen = await pollenRepository.GetPollenByName(honeyDto.Pollen_analysis ?? "", session);
+				if (pollen == null)
+				{
+					pollen = new Pollen() { Name = honeyDto.Pollen_analysis };
+					await pollenRepository.Insert(pollen, session);
+				}
+				return pollen;
+			})
 		}
 		private async Task<Honey> ToEntity(HoneyDto honeyDto)
 		{
@@ -181,7 +190,15 @@ namespace Chmura.Controllers
 				G = honeyDto.G,
 				Viscosity = honeyDto.Viscosity,
 				Purity = honeyDto.Purity,
-				PollenAnalysis = await transactionCoordinator.InRollbackScopeAsync(async session => await pollenRepository.GetPollenByName(honeyDto.Pollen_analysis ?? "", session))
+				PollenAnalysis = await transactionCoordinator.InCommitScopeAsync(async session => 
+				{
+					var pollen = await pollenRepository.GetPollenByName(honeyDto.Pollen_analysis ?? "", session);
+					if (pollen == null) { 
+						pollen = new Pollen() { Name = honeyDto.Pollen_analysis }; 
+						await pollenRepository.Insert(pollen, session);
+					}
+					return pollen;
+				})
 			};
 		}
 
