@@ -43,6 +43,7 @@ export const StatisticsPage = () => {
         <h1>Statistics</h1>
 
         <AjaxWrapper isAjax={isPending}>
+            Filter statistics based on property
             <div className="filter">
                 <div className="input-control">
                     <label htmlFor="filter">Property</label>

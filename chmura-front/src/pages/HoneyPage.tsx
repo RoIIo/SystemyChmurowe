@@ -76,6 +76,7 @@ export const HoneyPage = (props) => {
                 {isAdd &&
                     <HoneyForm item={defaultItem} refreshF={() => { getData(); setAdd(false) }} />}
             </div>
+            Filter data based on property
             <div className="filter">
                 <div className="input-control">
                     <label htmlFor="filter">Property</label>
