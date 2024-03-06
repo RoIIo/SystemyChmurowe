@@ -21,11 +21,11 @@ namespace Chmura.Repository
 	{
 		public async Task<IList<Honey>> GetFilteredEntities(HoneyFilter filter, ISession session)
 		{
-			return await session.Query<Honey>().AddWhere(filter).ToListAsync();
+			return await session.Query<Honey>().OrderBy(x=>x.Id).AddWhere(filter).ToListAsync();
 		}
 		public async Task<int> GetTotalEntities(HoneyFilter filter, ISession session)
 		{
-			return await session.Query<Honey>().AddWhere(filter).CountAsync();
+			return await session.Query<Honey>().OrderBy(x => x.Id).AddWhere(filter).CountAsync();
 		}
 		public async Task<Honey> GetById(int id, ISession session)
 		{
@@ -33,7 +33,7 @@ namespace Chmura.Repository
 		}
 		public async Task<IList<Honey>> GetPage(int page, int pageSize, HoneyFilter filter, ISession session)
 		{
-			return await session.Query<Honey>().AddWhere(filter).Skip(page * pageSize).Take(pageSize).ToListAsync();
+			return await session.Query<Honey>().OrderBy(x => x.Id).AddWhere(filter).Skip(page * pageSize).Take(pageSize).ToListAsync();
 		}
 		public async Task Delete(Honey honey, ISession session)
 		{
