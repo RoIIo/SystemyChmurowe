@@ -36,8 +36,8 @@ namespace Chmura.ORM
         {
             sessionFactory.Close();
         }
-        private ISessionFactory FluentConfigure()
-        {
+		private ISessionFactory FluentConfigure()
+		{
 			var configuration = Fluently.Configure()
 				.Database(GetDatabaseConfiguration)
 				.Mappings(m =>
@@ -46,9 +46,11 @@ namespace Chmura.ORM
 					c => c.UseQueryCache()
 					.UseSecondLevelCache()
 					.ProviderClass<NHibernate.Cache.HashtableCacheProvider>())
+				.ExposeConfiguration(cfg =>
+				{
+					new SchemaUpdate(cfg).Execute(false, true);
+				})
 				.BuildConfiguration();
-			var exporter = new SchemaExport(configuration);
-			exporter.Execute(true, true, false);
 
 			return configuration.BuildSessionFactory();
 		}
