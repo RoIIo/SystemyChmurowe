@@ -1,36 +1,61 @@
-header{
+header {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
 }
-.layout{
+
+.layout {
     display: grid;
     grid-template-columns: 1fr;
     gap: 10px;
 }
-body{
+
+body {
     position: relative;
 }
-.data-table{
-    
-    tr{
+
+.data-table {
+
+    tr {
         margin-top: 5px;
         cursor: pointer;
     }
-    td{
+
+    td {
         padding: 5px 10px;
     }
-    .row{
+
+    .row {
         background-color: #444444ff;
-        &:hover{
-                    background-color: #444444aa;
+
+        &:hover {
+            background-color: #444444aa;
         }
     }
-    .alt-row{
+
+    .alt-row {
         background-color: #666666ff;
-        &:hover{
-                    background-color: #666666aa;
+
+        &:hover {
+            background-color: #666666aa;
         }
+    }
+}
+
+.honey-form {
+    display: grid;
+    justify-content: flex-start;
+    gap: 10px;
+    align-items: center;
+    align-content: center;
+    grid-template-columns: repeat(11, auto) ;
+
+}
+.input-control{
+    width: 100%;
+    max-width: 100%;
+    input{
+        width: 100%;
     }
 }

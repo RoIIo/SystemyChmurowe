@@ -71,7 +71,7 @@ namespace Chmura.Controllers
 			await transactionCoordinator.InRollbackScopeAsync(async session =>
 			{
 				var honeyList = await honeyRepository.GetPage(page, pageSize, filter, session);
-				result = honeyList.Select(honey => honey.ToDto()).ToList();
+				result = honeyList.OrderBy(honey => honey.Id).Select(honey => honey.ToDto()).ToList();
 			});
 			return Ok(result);
 		}
@@ -175,7 +175,7 @@ namespace Chmura.Controllers
 					await pollenRepository.Insert(pollen, session);
 				}
 				return pollen;
-			})
+			});
 		}
 		private async Task<Honey> ToEntity(HoneyDto honeyDto)
 		{

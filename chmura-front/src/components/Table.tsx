@@ -22,33 +22,48 @@ export interface Honey {
 }
 export const Table = (props: ITableProps) => {
     const
-        { data } = props,
-        [isPopup, setPopup] = useState(false)
-     
+        { data, refreshF = () => { } } = props,
+        [activeRowId, setRowId] = useState(-1),
+        [editItem, setEditItem] = useState<Honey>(null),
+        handleRowClick = (item, id) => {
+            setRowId(id)
+            setEditItem(item)
+        }
+
 
 
     if (data.length == 0) return <></>
     return <>
         <table cellSpacing={0} className="data-table">
             <thead>
-                {Object.keys(data[0]).map((d, idx) => <th key={"-1" + idx}>{d}</th>)}
-                <th></th>
+                <tr>
+                    {Object.keys(data[0]).map((d, idx) => <th key={"-1" + idx}>{d}</th>)}
+                    <th></th>
+                </tr>
             </thead>
             <tbody>
-                {data.map((d, idx) => {
-                    return <tr className={`row ${idx % 2 && "alt-row"}`}>
-                        {Object.keys(d).map((key, idx) => <td key={"" + d["id"] + idx}>
-                            {d[key]}
-                        </td>)}
-                        <td>
-                            <Popup position={"center center"} trigger={<button >Edit</button>}>
-                                <HoneyForm item={d} isEdit={true} />
-                                XDDDDDDDD
-                            </Popup>
-                        </td>
-                    </tr>
+                {data.map((d, rowidx) => {
+                    return <>
+                        <tr key={"rrr" + rowidx} className={`row ${rowidx % 2 && "alt-row"}`}>
+                            {Object.keys(d).map((key, idx) => <td key={"" + d["id"] + idx}>
+                                {d[key]}
+                            </td>)}
+                            <td key={"ddddddd"}>
+                                <button onClick={() => handleRowClick(d, rowidx)}>Edit</button>
+                            </td>
+                        </tr>
+                        {
+                            rowidx == activeRowId &&
+                            <tr key={"xxxxxr"}>
+                                <td colSpan={Object.keys(d).length + 1}>
+                                    <HoneyForm {...props} item={d} isEdit={true} />
+                                </td>
+                            </tr>
+                        }
+                    </>
                 })}
             </tbody>
         </table>
+
     </>
 }

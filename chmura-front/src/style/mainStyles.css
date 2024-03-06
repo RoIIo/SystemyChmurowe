@@ -34,3 +34,20 @@ body {
 .data-table .alt-row:hover {
   background-color: rgba(102, 102, 102, 0.6666666667);
 }
+
+.honey-form {
+  display: grid;
+  justify-content: flex-start;
+  gap: 10px;
+  align-items: center;
+  align-content: center;
+  grid-template-columns: repeat(11, auto);
+}
+
+.input-control {
+  width: 100%;
+  max-width: 100%;
+}
+.input-control input {
+  width: 100%;
+}

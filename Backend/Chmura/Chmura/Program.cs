@@ -18,11 +18,14 @@ namespace Chmura
             // Add services to the container.
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy(name: specificOrgins,
+                options.AddDefaultPolicy(
                                   policy =>
                                   {
                                       policy.WithOrigins("http://localhost:5173");
+                                      policy.AllowAnyHeader();
+                                      policy.AllowAnyMethod();
                                   });
+
             });
 
 
@@ -46,7 +49,8 @@ namespace Chmura
             }
 
             app.UseHttpsRedirection();
-            app.UseCors(specificOrgins);
+            //app.UseCors(specificOrgins);
+            app.UseCors();
 
             app.UseAuthorization();
 
