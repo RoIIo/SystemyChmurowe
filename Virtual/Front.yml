@@ -1,0 +1,34 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: apache is installed
+      community.general.pacman:
+        name: apache
+        state: present
+        update_cache: yes
+
+    - name: httpd service is enabled
+      ansible.builtin.service:
+        name: httpd
+        state: started
+
+    - name: Npm is installed
+      community.general.pacman:
+        name: npm
+        state: present
+        update_cache: yes
+
+    - name: project is cloned
+      ansible.builtin.git:
+        path: ~/
+        repo: https://github.com/RoIIo/SystemyChmurowe.git
+
+    -name: project is moved
+      ansible.builtin.shell: mv ~/SystemyChmurowe/front ~/front
+
+    - name: Front is ready
+      ansible.builtin.lineinfile:
+        path: ~/front
+        create: yes
+        command: npm start

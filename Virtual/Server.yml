@@ -1,0 +1,36 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: apache is installed
+      community.general.pacman:
+        name: apache
+        state: present
+        update_cache: yes
+
+    - name: httpd service is enabled
+      ansible.builtin.service:
+        name: httpd
+        state: started
+
+    - name: project is cloned
+      ansible.builtin.git:
+        path: ~/
+        repo: https://github.com/RoIIo/SystemyChmurowe.git
+
+    -name: msbuild is installed
+      community.general.pacman:
+        name: msbuild
+        state: present
+        update_cache: yes
+
+    -name: project is moved
+      ansible.builtin.shell: mv ~/SystemyChmurowe/Backend/Chmura ~/backend
+    
+    -name: project is compiled
+      ansible.builtin.shell: msbuild ~/backend/Chmura.sln
+      path: ~/backend
+
+    -name: project is started
+      ansible.builtin.shell: ~/backend/Chmura/bin/Debug/net8.0/Chmura.exe
+      path: ~/backend

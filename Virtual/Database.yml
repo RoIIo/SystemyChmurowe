@@ -1,0 +1,38 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: apache is installed
+      community.general.pacman:
+        name: apache
+        state: present
+        update_cache: yes
+
+    - name: httpd service is enabled
+      ansible.builtin.service:
+        name: httpd
+        state: started
+
+    - name: Install postgresql
+      community.general.pacman:
+        name: postgresql
+        state: present
+        update_cache: yes
+    - name: Start postgresql
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+
+    - name: Create user
+      community.general.postgresql_user:
+        name: CHMURAUser
+        password: CHMURAPassword
+        role_attr_flags: CREATEDB
+    - name: create database
+    
+      community.general.postgresql_db:
+        name: CHMURA
+        login_user: CHMURAUser
+        login_password: CHMURAPassword
+        state: present
+      -

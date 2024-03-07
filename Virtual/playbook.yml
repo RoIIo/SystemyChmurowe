@@ -1,0 +1,20 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: apache is installed
+      community.general.pacman:
+        name: apache
+        state: present
+        update_cache: yes
+
+    - name: httpd service is enabled
+      ansible.builtin.service:
+        name: httpd
+        state: started
+
+    - name: hello world content is ready
+      ansible.builtin.lineinfile:
+        path: /srv/http/index.html
+        create: yes
+        line: <h1>Hello World from Vagrant with Ansible!</h1>
