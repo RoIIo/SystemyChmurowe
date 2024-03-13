@@ -49,7 +49,7 @@ export const StatisticsPage = () => {
                     <label htmlFor="filter">Property</label>
                     <select id='filter' name='filter' onChange={(e) => { setFilterName(e.target.value) }}>
                         {
-                            Object.keys(defaultItem).map((k, idx) => <option value={k}>{k}</option>)
+                            Object.keys(defaultItem).map((k,) => <option value={k}>{k}</option>)
                         }
                     </select>
                 </div>
