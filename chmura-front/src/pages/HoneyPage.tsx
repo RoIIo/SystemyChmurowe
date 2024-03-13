@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PageWrapper } from '../components/PageWrapper'
 import axios from 'axios'
 import { baseRoot } from '../components/projectComponents'
@@ -21,10 +21,10 @@ export const defaultItem = {
     wc: 0
 } as Honey
 
-export const HoneyPage = (props) => {
+export const HoneyPage = () => {
     const
         [data, setData] = useState<Honey[]>([]),
-        [totalEntries, setTotal] = useState(0),
+        [, setTotal] = useState(0),
         [filterName, setFilterName] = useState(""),
         [filterValue, setFilterValue] = useState(null),
         [isPending, setPending] = useState(false),
@@ -82,7 +82,7 @@ export const HoneyPage = (props) => {
                     <label htmlFor="filter">Property</label>
                     <select id='filter' name='filter' onChange={(e) => { setFilterName(e.target.value) }}>
                         {
-                            Object.keys(defaultItem).map((k, idx) => <option value={k}>{k}</option>)
+                            Object.keys(defaultItem).map((k,) => <option value={k}>{k}</option>)
                         }
                     </select>
                 </div>

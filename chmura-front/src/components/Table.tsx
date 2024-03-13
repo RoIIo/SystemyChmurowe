@@ -1,7 +1,5 @@
 import { useState } from "react"
-import { Modal } from "./Popup"
 import { HoneyForm } from "./HoneyForm"
-import Popup from "reactjs-popup"
 
 export interface ITableProps {
     data: Honey[]
@@ -22,9 +20,9 @@ export interface Honey {
 }
 export const Table = (props: ITableProps) => {
     const
-        { data, refreshF = () => { } } = props,
+        { data } = props,
         [activeRowId, setRowId] = useState(-1),
-        [editItem, setEditItem] = useState<Honey>(null),
+        [, setEditItem] = useState<Honey>(null),
         handleRowClick = (item, id) => {
             setRowId(id)
             setEditItem(item)
