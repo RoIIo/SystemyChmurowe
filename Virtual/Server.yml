@@ -1,0 +1,33 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Install .NET Core SDK
+      pacman:
+        name: dotnet-sdk
+        state: present
+
+    - name: Clone project repository
+      ansible.builtin.git:
+        dest: ~/SystemyChmurowe
+        repo: https://github.com/RoIIo/SystemyChmurowe.git
+        force: yes
+
+    - name: Delete existing 'backend' directory if it exists
+      ansible.builtin.file:
+        path: ~/backend
+        state: absent
+
+    - name: Move project to 'backend' directory
+      ansible.builtin.shell: mv ~/SystemyChmurowe/Backend ~/backend
+
+    - name: Ensure 'backend' directory exists
+      ansible.builtin.file:
+        path: ~/backend
+        state: directory
+
+    - name: Build the .NET Web API project
+      shell: dotnet build ~/backend
+
+    - name: Run the .NET Web API project
+      shell: dotnet run ~/backend

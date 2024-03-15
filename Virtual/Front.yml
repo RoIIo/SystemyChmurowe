@@ -1,0 +1,96 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Update keyring
+      community.general.pacman:
+        name: archlinux-keyring
+        state: latest
+        update_cache: yes
+    - name: Update system using pacman
+      community.general.pacman:
+        update_cache: yes
+        upgrade: yes
+        force: yes
+
+    - name: apache is installed
+      community.general.pacman:
+        name: apache
+        state: present
+        update_cache: yes
+
+    - name: httpd service is enabled
+      ansible.builtin.service:
+        name: httpd
+        state: started
+
+    - name: Npm is installed
+      community.general.pacman:
+        name: npm
+        state: latest
+        update_cache: yes
+
+    - name: "Install forever (to run Node.js app)."
+      npm: name=forever global=yes state=present
+
+
+    - name: Install nodejs
+      community.general.pacman:
+        name: nodejs
+        state: latest
+        update_cache: yes
+      
+    - name: Install python
+      community.general.pacman:
+        name: python
+        state: latest
+
+    - name: Install Git
+      community.general.pacman:
+        name: git
+        state: latest
+
+    - name: "Check list of Node.js apps running."
+      command: forever list
+      register: forever_list
+      changed_when: false
+
+    - name: Clone project repository
+      ansible.builtin.git:
+        dest: ~/SystemyChmurowe
+        repo: https://github.com/RoIIo/SystemyChmurowe.git
+        force: yes
+
+    - name: Delete existing 'front' directory if it exists
+      ansible.builtin.file:
+        path: ~/front
+        state: absent
+
+    - name: Move project to 'front' directory
+      ansible.builtin.shell: mv ~/SystemyChmurowe/chmura-front ~/front
+
+    - name: Ensure 'front' directory exists
+      ansible.builtin.file:
+        path: ~/front
+        state: directory
+
+    - name: Install packages
+      ansible.builtin.shell: npm install
+      args:
+        chdir: ~/front
+    - name: Build project
+      ansible.builtin.shell: npm run build
+      args:
+        chdir: ~/front
+
+    #- name: Starting front
+    #  ansible.builtin.shell: npm start
+    #  args:
+    #    chdir: ~/front
+    - name: "Start example Node.js app."
+      command: forever start ~/front
+      when: "forever_list.stdout.find('~/front/dist/index.html') == -1"
+
+    - name: Front is ready
+      debug:
+        msg: "Front is ready"

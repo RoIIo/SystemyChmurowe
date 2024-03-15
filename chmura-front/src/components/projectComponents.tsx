@@ -9,7 +9,7 @@ export interface ProjetLink {
     isVisible: boolean,
     label: string
 }
-export const baseRoot = "https://localhost:7013/api"
+export const baseRoot = "http://localhost:8080/api"
 export const projectComponents = [
     {
         label: "Home",

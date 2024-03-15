@@ -21,7 +21,7 @@ namespace Chmura
                 options.AddDefaultPolicy(
                                   policy =>
                                   {
-                                      policy.WithOrigins("http://localhost:5173");
+                                      policy.WithOrigins("http://localhost:8082");
                                       policy.AllowAnyHeader();
                                       policy.AllowAnyMethod();
                                   });
