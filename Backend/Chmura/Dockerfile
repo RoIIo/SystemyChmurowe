@@ -28,5 +28,5 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 COPY "Chmura/Data/" "Data/"
-
+ENV ConnectionStrings__DefaultConnection "Server=host.docker.internal;Database=CHMURA;Port=5432;Username=CHMURAUser;Password=CHMURAPassword;"
 ENTRYPOINT ["dotnet", "Chmura.dll", "--launch-profile", "Docker"]
