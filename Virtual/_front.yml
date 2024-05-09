@@ -1,0 +1,60 @@
+- hosts: all
+  become: yes
+
+  tasks:
+    - name: Upgrade all packages to the latest version
+      ansible.builtin.apt:
+        upgrade: dist
+
+    - name: Install Git
+      ansible.builtin.apt:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Add NodeSource repository and install Node.js
+      ansible.builtin.shell:
+        cmd: |
+          curl -fsSL https://deb.nodesource.com/setup_21.x | sudo -E bash -
+          sudo apt-get install -y nodejs
+
+    - name: Install build-essential
+      apt:
+        name: build-essential
+        state: present
+
+    - name: Clone repo
+      ansible.builtin.git:
+        dest: ~/SystemyChmurowe
+        repo: https://github.com/RoIIo/SystemyChmurowe.git
+        force: yes
+
+    - name: Create .env.local file
+      ansible.builtin.copy:
+        dest: ~/SystemyChmurowe/.env.local
+        content: |
+          NEXT_PUBLIC_API_URL=http://localhost:8080
+          NEXT_PRIVATE_API_URL=http://192.168.50.5:8080
+
+    - name: Install dependencies
+      ansible.builtin.command:
+        cmd: npm install
+        chdir: ~/SystemyChmurowe
+
+    - name: Install pm2 globally
+      ansible.builtin.command:
+        cmd: npm install pm2 -g
+
+    - name: Fix broken packages
+      ansible.builtin.command:
+        cmd: sudo apt --fix-broken install
+
+    - name: Build the application
+      ansible.builtin.command:
+        cmd: npm run build
+        chdir: ~/SystemyChmurowe
+
+    - name: Start the application
+      ansible.builtin.command:
+        cmd: pm2 start npm --name "my-app" -- run start
+        chdir: ~/SystemyChmurowe
