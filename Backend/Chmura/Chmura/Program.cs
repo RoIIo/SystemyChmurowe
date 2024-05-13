@@ -15,20 +15,6 @@ namespace Chmura
             var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
             var specificOrgins = "AppOrigins";
 
-            // Add services to the container.
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                                  policy =>
-                                  {
-                                      policy.WithOrigins("http://localhost:8082");
-                                      policy.AllowAnyHeader();
-                                      policy.AllowAnyMethod();
-                                  });
-
-            });
-
-
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -47,6 +33,12 @@ namespace Chmura
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors(options =>
+            {
+                options.AllowAnyOrigin();
+                options.AllowAnyMethod();
+                options.AllowAnyHeader();
+            });
 
             app.UseHttpsRedirection();
             //app.UseCors(specificOrgins);
