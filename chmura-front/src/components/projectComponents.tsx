@@ -9,7 +9,7 @@ export interface ProjetLink {
     isVisible: boolean,
     label: string
 }
-export const baseRoot = "http://localhost:8080/api"
+export const baseRoot = import.meta.env.VITE_BACKEND_URL + "/api"
 export const projectComponents = [
     {
         label: "Home",

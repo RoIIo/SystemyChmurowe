@@ -16,11 +16,14 @@ namespace Chmura.ORM
     }
     public class NHibernateHelper : INHibernateHelper
     {
+		private readonly ILogger<NHibernateHelper> logger;
         private ISessionFactory sessionFactory;
         private string connectionString;
-        public NHibernateHelper(IConfiguration configuration)
+        public NHibernateHelper(IConfiguration configuration, ILogger<NHibernateHelper> logger)
         {
+            logger = logger;
 			connectionString = configuration.GetConnectionString("DefaultConnection") ?? "";
+            logger.LogInformation("Connection string: {0}", connectionString);
 			sessionFactory = FluentConfigure();
 		}
 

@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   frontend:
+    container_name: frontend
     build: ./chmura-front/
     ports:
       - "8082:8082"
@@ -8,15 +9,15 @@ services:
         - backend
   backend:
     build: ./Backend/Chmura/
+    container_name: backend
     ports:
       - "8080:8080"
       - "8081:8081"
     depends_on:
       - database
-    environment:
-      CONNECTION_STRING: "Host=database;Port=5432;Database=CHMURA;Username=CHMURAUser;Password=CHMURAPassword"
   database:
-    image: postgres:12.17-bullseye
+    container_name: database
+    image: postgres:13.14-bullseye
     restart: always
     environment:
       POSTGRES_DB: CHMURA
