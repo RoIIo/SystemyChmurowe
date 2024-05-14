@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose.exe convert
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: backend
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: backend
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose.exe convert
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: backend
+    spec:
+      containers:
+        - image: systemychmurowe-backend:latest # rollo53/backend:1.2
+          name: backend
+          ports:
+            - containerPort: 8080
+            - containerPort: 8081
+          env:
+            - name: ConnectionStrings__DefaultConnection
+              value: "Server=database;Database=CHMURA;Port=5432;Username=CHMURAUser;Password=CHMURAPassword;"
+          resources: {}
+      restartPolicy: Always
+status: {}
