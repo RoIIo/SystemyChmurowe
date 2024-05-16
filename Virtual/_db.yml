@@ -27,8 +27,8 @@
         - postgresql
         - postgresql-contrib
 
-    # - name: Set password
-    #   ansible.builtin.command: sudo -u postgres psql -c "ALTER USER postgres PASSWORD '1234';"
+    - name: Set password
+      ansible.builtin.command: sudo -u postgres psql -c "ALTER USER postgres PASSWORD 'CHMURAPassword';"
     # - name: Create user
     #   ansible.builtin.command: sudo -u postgres createuser CHMURAUser
     # - name: Set password
@@ -60,7 +60,8 @@
     - name: Create PostgreSQL database
       postgresql_db:
         name: CHMURA
-        owner: CHMURAUser
+        owner: postgres
+        login_password: CHMURAPassword
         state: present
 
     - name: Restart service

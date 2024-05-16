@@ -3,7 +3,7 @@
 
   tasks:
     - name: Install .NET Core SDK
-      pacman:
+      ansible.builtin.apt:
         name: dotnet-sdk
         state: present
 

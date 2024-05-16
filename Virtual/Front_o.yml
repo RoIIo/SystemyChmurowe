@@ -2,22 +2,15 @@
   become: yes
 
   tasks:
-    - name: Update keyring
-      community.general.pacman:
-        name: archlinux-keyring
-        state: latest
-        update_cache: yes
-    - name: Update system using pacman
-      community.general.pacman:
-        update_cache: yes
-        upgrade: yes
-        force: yes
+    - name: Upgrade all packages to the latest version
+      ansible.builtin.apt:
+        upgrade: dist
 
-    - name: apache is installed
-      community.general.pacman:
-        name: apache
-        state: present
-        update_cache: yes
+    # - name: apache is installed
+    #   ansible.builtin.apt:
+    #     name: apache
+    #     state: present
+    #     update_cache: yes
 
     - name: httpd service is enabled
       ansible.builtin.service:
@@ -25,35 +18,31 @@
         state: started
 
     - name: Npm is installed
-      community.general.pacman:
+      ansible.builtin.apt:
         name: npm
         state: latest
         update_cache: yes
 
-    - name: "Install forever (to run Node.js app)."
-      npm: name=forever global=yes state=present
 
 
     - name: Install nodejs
-      community.general.pacman:
+      ansible.builtin.apt:
         name: nodejs
         state: latest
         update_cache: yes
+    - name: Install pm2 globally
+      ansible.builtin.command:
+        cmd: npm install pm2 -g
       
     - name: Install python
-      community.general.pacman:
+      ansible.builtin.apt:
         name: python
         state: latest
 
     - name: Install Git
-      community.general.pacman:
+      ansible.builtin.apt:
         name: git
         state: latest
-
-    - name: "Check list of Node.js apps running."
-      command: forever list
-      register: forever_list
-      changed_when: false
 
     - name: Clone project repository
       ansible.builtin.git:
@@ -83,13 +72,14 @@
       args:
         chdir: ~/front
 
-    #- name: Starting front
-    #  ansible.builtin.shell: npm start
-    #  args:
-    #    chdir: ~/front
-    - name: "Start example Node.js app."
-      command: forever start ~/front
-      when: "forever_list.stdout.find('~/front/dist/index.html') == -1"
+    - name: Fix broken packages
+      ansible.builtin.command:
+        cmd: sudo apt --fix-broken install
+
+    - name: Start the application
+      ansible.builtin.command:
+        cmd: pm2 start npm --name "my-app" -- run start
+        chdir: ~/front
 
     - name: Front is ready
       debug:

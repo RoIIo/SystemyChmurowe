@@ -2,20 +2,19 @@
   become: yes
 
   tasks:
-    - name: Update keyring
-      community.general.pacman:
-        name: archlinux-keyring
-        state: latest
-        update_cache: yes
-
-    - name: Update system using pacman
-      community.general.pacman:
+   
+    - name: Update system using apt
+      ansible.builtin.apt:
         update_cache: yes
         upgrade: yes
         force: yes
+    - name: Install psycopg2
+      ansible.builtin.apt:
+        name: python3-psycopg2
+        state: latest
     - name: Install python
-      community.general.pacman:
-        name: python
+      ansible.builtin.apt:
+        name: python3-apt
         state: latest
 
     - name: Ensure PostgreSQL directory exists with correct permissions
@@ -24,34 +23,50 @@
         state: directory
         owner: postgres
         group: postgres
-        mode: '0700'
+        mode: "0700"
 
     - name: Install PostgreSQL
-      pacman:
-        name: postgresql
-        state: present  # Ensure PostgreSQL is installed
-
-    - name: Initialize PostgreSQL database
-      become_user: postgres
-      command: /usr/bin/initdb -D /var/lib/postgres/data
-      become: yes
-
-    - name: Start PostgreSQL service
-      systemd:
-        name: postgresql
-        state: started
-        enabled: yes
-        become: yes
-
-    - name: Create PostgreSQL user
-      postgresql_user:
-        db: postgres
-        name: CHMURAUser
-        password: PASSWORDUser
+      ansible.builtin.apt:
+        name: "{{ item }}"
         state: present
+        update_cache: yes
+      loop:
+        - postgresql
+        - postgresql-contrib
 
-    - name: Create PostgreSQL database
+    # - name: Initialize PostgreSQL database
+    #   become_user: postgres
+    #   command: /usr/bin/initdb -D /var/lib/postgres/data
+    #   become: yes
+
+    # - name: Start PostgreSQL service
+    #   systemd:
+    #     name: postgresql
+    #     state: started
+    #     enabled: yes
+
+    # - name: Create PostgreSQL userr
+    #   postgresql_user:
+    #     # db: CHMURA
+    #     name: CHMURAUser
+    #     password: PASSWORDUser
+    #     state: present
+
+    # - name: Create PostgreSQL database
+    #   postgresql_db:
+    #     name: CHMURA
+    #     owner: CHMURAUser
+    #     state: present
+
+    - name: Create a PostgreSQL database user
+      postgresql_user: name=CHMURAUser password=PASSWORDUser role_attr_flags=CREATEDB state=present
+      become: yes
+      become_user: postgres
+      become_method: sudo
+
+    - name: Create  database
+      become: yes
+      become_user: postgres
       postgresql_db:
         name: CHMURA
-        owner: CHMURAUser
-        state: present
+        encoding: UTF-8

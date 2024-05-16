@@ -22,20 +22,21 @@ Vagrant.configure("2") do |config|
   #  components ['main']
   # end
   config.vm.define "database" do |database|
-    database.vm.box = "ubuntu/xenial64"
+    database.vm.box = "ubuntu/mantic64"
     database.vm.provision :ansible_local, :playbook => "_db.yml"
     database.vm.network :private_network, :ip => '192.168.20.21'
   end
   
   config.vm.define "front" do |front|
-     front.vm.box = "ubuntu/xenial64"
-     front.vm.provision :ansible_local, :playbook => "_front.yml"
+     front.vm.box = "ubuntu/mantic64"
+     front.vm.provision :ansible_local, :playbook => "Front_o.yml"
      front.vm.network :forwarded_port, :guest => 5173, :host => 9091, :host_ip => "127.0.0.1" 
   end
 
   config.vm.define "server" do |server|
-     server.vm.box = "ubuntu/xenial64"
-     server.vm.provision :ansible_local,  :playbook => "_backend.yml"
+    #  server.vm.box = "ubuntu/mantic64"
+     server.vm.box = "ubuntu/mantic64"
+     server.vm.provision :ansible_local,  :playbook => "Server.yml"
      server.vm.network :private_network, ip: "192.168.1.3"
   end  
 
